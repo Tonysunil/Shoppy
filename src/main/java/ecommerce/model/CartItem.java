@@ -1,5 +1,5 @@
 package ecommerce.model;
-public class CartItem<Product> {
+public class CartItem {
     private int cartId, userId, productId, quantity;
     private Product product; // for display
     // getters & setters
