@@ -31,9 +31,13 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("error", "Registration failed");
                 request.getRequestDispatcher("/views/register.jsp").forward(request, response);
             }
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+            request.setAttribute("error", "Username or Email already exists!");
+            request.getRequestDispatcher("/views/register.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendError(500);
+            request.setAttribute("error", "Database error occurred.");
+            request.getRequestDispatcher("/views/register.jsp").forward(request, response);
         }
     }
 }
