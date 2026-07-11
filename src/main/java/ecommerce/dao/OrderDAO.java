@@ -15,7 +15,7 @@ public class OrderDAO {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
             double total = 0;
-            for (CartItem ci : cartItems) total += ci.getQuantity() * ((OrderItem) ci.getProduct()).getPrice();
+            for (CartItem ci : cartItems) total += ci.getQuantity() * ci.getProduct().getPrice();
 
             String orderSQL = "INSERT INTO orders (user_id, total_amount, shipping_address, payment_method, status) VALUES (?, ?, ?, ?, 'PENDING')";
             int orderId = 0;
@@ -36,7 +36,7 @@ public class OrderDAO {
                     ps.setInt(1, orderId);
                     ps.setInt(2, ci.getProductId());
                     ps.setInt(3, ci.getQuantity());
-                    ps.setDouble(4, ((OrderItem) ci.getProduct()).getPrice());
+                    ps.setDouble(4, ci.getProduct().getPrice());
                     ps.addBatch();
                 }
                 ps.executeBatch();
