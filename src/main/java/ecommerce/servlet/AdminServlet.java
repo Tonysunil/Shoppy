@@ -181,7 +181,7 @@ public class AdminServlet extends HttpServlet {
         int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex > 0) extension = fileName.substring(dotIndex);
         else extension = ".jpg";
-        String finalFileName = baseName + extension;
+        String finalFileName = baseName + "_" + System.currentTimeMillis() + extension;
         String uploadPath = getServletContext().getRealPath("") + File.separator + "images";
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdirs();
