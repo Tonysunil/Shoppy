@@ -18,7 +18,7 @@
         .admin-badge { background: #ffc107; color: #000; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; margin-left: 5px; }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="${pageContext.request.contextPath}/home"><i class="fas fa-shopping-bag me-2"></i>MyShoppy</a>
@@ -56,4 +56,4 @@
         </div>
     </div>
 </nav>
-<div class="container mt-3">
+<div class="container mt-3 flex-grow-1">
