@@ -35,6 +35,10 @@
                     </c:if>
                 </c:if>
             </ul>
+            <form class="d-flex me-3" action="${pageContext.request.contextPath}/home" method="get">
+                <input class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search" name="search" value="${searchQuery}">
+                <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+            </form>
             <div class="d-flex align-items-center">
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">

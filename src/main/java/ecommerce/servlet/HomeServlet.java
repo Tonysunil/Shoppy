@@ -16,7 +16,16 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             ProductDAO dao = new ProductDAO();
-            List<Product> products = dao.getAllProducts();
+            String searchQuery = request.getParameter("search");
+            List<Product> products;
+            
+            if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+                products = dao.searchProducts(searchQuery.trim());
+                request.setAttribute("searchQuery", searchQuery.trim());
+            } else {
+                products = dao.getAllProducts();
+            }
+            
             request.setAttribute("productList", products);
             request.getRequestDispatcher("/views/home.jsp").forward(request, response);
         } catch (Exception e) {

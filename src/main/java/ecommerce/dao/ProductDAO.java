@@ -27,6 +27,30 @@ public class ProductDAO {
         }
         return list;
     }
+
+    public List<Product> searchProducts(String keyword) throws SQLException {
+        List<Product> list = new ArrayList<>();
+        String query = "SELECT * FROM products WHERE product_name LIKE ? OR description LIKE ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            String searchPattern = "%" + keyword + "%";
+            ps.setString(1, searchPattern);
+            ps.setString(2, searchPattern);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product p = new Product();
+                p.setProductId(rs.getInt("product_id"));
+                p.setProductName(rs.getString("product_name"));
+                p.setDescription(rs.getString("description"));
+                p.setPrice(rs.getDouble("price"));
+                p.setStock(rs.getInt("stock"));
+                p.setCategoryId(rs.getInt("category_id"));
+                p.setImageUrl(rs.getString("image_url"));
+                list.add(p);
+            }
+        }
+        return list;
+    }
     public Product getProductById(int id) throws SQLException {
         String query = "SELECT * FROM products WHERE product_id=?";
         try (Connection conn = DBConnection.getConnection();
