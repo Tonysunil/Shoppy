@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'default', // Forces a light theme
+            securityLevel: 'loose'
+        });
+    </script>
+    <style>
+        body {
+            background-color: #ffffff; /* Pure white background */
+            color: #000000;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .diagram-container {
+            margin-bottom: 80px;
+            text-align: center;
+        }
+        h2 {
+            text-align: left;
+            border-bottom: 2px solid #eeeeee;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="diagram-container">
+        <h2>1.1 & 3.1 System Architecture of E-Commerce Website</h2>
+        <div class="mermaid">
+graph TD
+    Client[Client Browser / Mobile] -->|HTTP Requests| Server[Tomcat 10 Server]
+    Server -->|Routes| Servlets[Java Servlets / Controller]
+    Server -->|Renders| JSP[JSP Views]
+    Servlets -->|Calls| DAO[Data Access Objects]
+    DAO -->|JDBC| DB[(Aiven MySQL Database)]
+    
+    style Server fill:#f9f,stroke:#333,stroke-width:2px
+    style DB fill:#f9f,stroke:#333,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>1.2 Workflow of the E-Commerce Website</h2>
+        <div class="mermaid">
+graph LR
+    A([Start]) --> B{Has Account?}
+    B -- No --> C[Register]
+    C --> D[Login]
+    B -- Yes --> D
+    D --> E[Browse Products]
+    E --> F[Add to Cart]
+    F --> G[Checkout]
+    G --> H[Payment / Place Order]
+    H --> I[Order History]
+    I --> J([Logout])
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>2.1 Literature Survey Overview</h2>
+        <div class="mermaid">
+graph TD
+    A[Literature Survey] --> B[Evolution of E-commerce]
+    A --> C[Analysis of Existing Systems]
+    A --> D[Proposed System Architecture]
+    C --> C1(Identifying Flaws: Security, UI, Speed)
+    D --> D1(Java EE, Docker, Cloud DB)
+    A --> E[Comparative Analysis]
+    A --> F[Research Gaps Addressed]
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3.2 ER-Diagram</h2>
+        <div class="mermaid">
+erDiagram
+    USERS ||--o{ ORDERS : places
+    USERS ||--o{ CART : maintains
+    CATEGORIES ||--|{ PRODUCTS : organizes
+    PRODUCTS ||--o{ CART : added_to
+    ORDERS ||--|{ ORDER_ITEMS : contains
+    PRODUCTS ||--o{ ORDER_ITEMS : included_in
+
+    USERS {
+        int user_id PK
+        string username
+        string password
+    }
+    PRODUCTS {
+        int product_id PK
+        string product_name
+        float price
+    }
+    ORDERS {
+        int order_id PK
+        float total_amount
+    }
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3.3 Use Case Diagram</h2>
+        <div class="mermaid">
+graph LR
+    User((User))
+    Admin((Administrator))
+
+    User --> (Register/Login)
+    User --> (Browse Products)
+    User --> (Search Products)
+    User --> (Manage Cart)
+    User --> (Place Order)
+    User --> (View Order History)
+
+    Admin --> (Login)
+    Admin --> (Add/Edit/Delete Products)
+    Admin --> (Manage Categories)
+    Admin --> (Update Order Status)
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3.4 Class Diagram</h2>
+        <div class="mermaid">
+classDiagram
+    class User {
+        -int userId
+        -String username
+        -String role
+        +getters()
+    }
+    class Product {
+        -int productId
+        -String productName
+        -double price
+        +getters()
+    }
+    class Order {
+        -int orderId
+        -int userId
+        -double totalAmount
+        +getters()
+    }
+    class ProductDAO {
+        +getAllProducts() List
+        +searchProducts(String) List
+    }
+    class OrderDAO {
+        +placeOrder(int, String, String) void
+    }
+    User "1" -- "*" Order : places
+    ProductDAO ..> Product : manages
+    OrderDAO ..> Order : manages
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3.5 Sequence Diagram (Checkout Process)</h2>
+        <div class="mermaid">
+sequenceDiagram
+    actor User
+    participant Browser
+    participant CheckoutServlet
+    participant OrderDAO
+    participant Database
+
+    User->>Browser: Clicks "Place Order"
+    Browser->>CheckoutServlet: POST Request
+    CheckoutServlet->>OrderDAO: placeOrder()
+    OrderDAO->>Database: BEGIN TRANSACTION
+    OrderDAO->>Database: INSERT into orders
+    OrderDAO->>Database: MOVE items from cart to order_items
+    OrderDAO->>Database: DELETE from cart
+    OrderDAO->>Database: COMMIT TRANSACTION
+    Database-->>OrderDAO: Success
+    OrderDAO-->>CheckoutServlet: Order Placed
+    CheckoutServlet-->>Browser: Redirect to Order History
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3.6 Activity Diagram (Shopping Flow)</h2>
+        <div class="mermaid">
+stateDiagram-v2
+    [*] --> Login
+    Login --> BrowseProducts
+    BrowseProducts --> ViewProductDetails
+    ViewProductDetails --> AddToCart
+    AddToCart --> BrowseProducts : Continue Shopping
+    AddToCart --> Cart
+    Cart --> Checkout
+    Checkout --> OrderPlaced
+    OrderPlaced --> [*]
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3.7 Data Flow Diagram (DFD Level 0)</h2>
+        <div class="mermaid">
+graph LR
+    U[Customer] -->|Order Request, Login| System((Shoppy E-Commerce System))
+    System -->|Order Confirmation, Products| U
+    A[Administrator] -->|Product Details, Status Updates| System
+    System -->|Sales Reports, Inventory Data| A
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3.8 Data Flow Diagram (DFD Level 1)</h2>
+        <div class="mermaid">
+graph LR
+    U[Customer] --> P1((1.0 Authentication))
+    P1 --> D1[(Users Database)]
+    U --> P2((2.0 Product Management))
+    P2 --> D2[(Products Database)]
+    U --> P3((3.0 Cart Management))
+    P3 --> D3[(Cart Database)]
+    U --> P4((4.0 Order Processing))
+    P4 --> D4[(Orders Database)]
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3.9 Flow Chart</h2>
+        <div class="mermaid">
+graph TD
+    Start([Start]) --> Login{User Logged In?}
+    Login -- No --> Reg[Register/Login Page]
+    Reg --> Home[Home Page]
+    Login -- Yes --> Home
+    Home --> Search[Search Products]
+    Search --> Cart{Add to Cart?}
+    Cart -- Yes --> Add[Update Cart DB]
+    Add --> Checkout[Proceed to Checkout]
+    Cart -- No --> Home
+    Checkout --> Done([End])
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>4.1 Database Connection Flow</h2>
+        <div class="mermaid">
+graph LR
+    Servlet[Java Servlet] --> DAO[DAO Layer]
+    DAO --> DBConn[DBConnection.java]
+    DBConn -->|DriverManager| JDBC[MySQL JDBC Driver]
+    JDBC --> DB[(Aiven MySQL)]
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>4.2 Administrator Module</h2>
+        <div class="mermaid">
+graph TD
+    Admin([Administrator]) --> Login[Admin Login]
+    Login --> Dashboard[Admin Dashboard]
+    Dashboard --> P[Manage Products]
+    P --> P1(Add / Edit / Delete)
+    Dashboard --> O[Manage Orders]
+    O --> O1(Update Status)
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>4.3 User Registration Module</h2>
+        <div class="mermaid">
+graph TD
+    User([New User]) --> Form[Fills Form]
+    Form --> Servlet[RegisterServlet]
+    Servlet --> Check{Email Exists?}
+    Check -- Yes --> Error[Error Message]
+    Check -- No --> Hash[Save to DB]
+    Hash --> Success[Redirect to Login]
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>4.4 Login Module</h2>
+        <div class="mermaid">
+graph TD
+    User([User]) --> Form[Enter Credentials]
+    Form --> Servlet[LoginServlet]
+    Servlet --> Check{Match in DB?}
+    Check -- No --> Error[Show Invalid Credentials]
+    Check -- Yes --> Role{Role = ADMIN?}
+    Role -- Yes --> Admin[Redirect to Admin Panel]
+    Role -- No --> Home[Redirect to Home Page]
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>4.5 Order Flow Diagram</h2>
+        <div class="mermaid">
+graph TD
+    Cart[Items in Cart] --> Click[Click Place Order]
+    Click --> Check[Verify Stock Availability]
+    Check --> Insert[Insert Order Record]
+    Insert --> Move[Move to Order_Items]
+    Move --> Clear[Clear Cart]
+    Clear --> History[Show in History]
+        </div>
+    </div>
+
+</body>
+</html>

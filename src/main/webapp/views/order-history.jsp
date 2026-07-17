@@ -1,6 +1,20 @@
 <%@ include file="../includes/header.jsp" %>
 <h2>My Orders</h2>
-<c:if test="${param.placed eq 'true'}"><div class="alert alert-success">Order placed successfully!</div></c:if>
+<c:if test="${param.placed eq 'true'}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: 'Order Successful!',
+                text: 'Your order has been placed securely. Check below for details!',
+                icon: 'success',
+                confirmButtonText: 'Awesome!',
+                confirmButtonColor: '#198754'
+            });
+            window.history.replaceState({}, document.title, window.location.pathname);
+        });
+    </script>
+</c:if>
 <c:if test="${empty orders}"><div class="alert alert-info">No orders yet. <a href="${pageContext.request.contextPath}/home">Start shopping</a></div></c:if>
 <c:if test="${not empty orders}">
     <div class="list-group">
