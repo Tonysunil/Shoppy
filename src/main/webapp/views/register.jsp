@@ -12,7 +12,7 @@
                     <div class="mb-3"><label>Password</label><input type="password" name="password" class="form-control" required></div>
                     <button type="submit" class="btn btn-success w-100">Register</button>
                 </form>
-                <p class="mt-3 text-center">Already have an account? <a href="login.jsp">Login</a></p>
+                <p class="mt-3 text-center">Already have an account? <a href="${pageContext.request.contextPath}/views/login.jsp">Login</a></p>
             </div>
         </div>
     </div>
