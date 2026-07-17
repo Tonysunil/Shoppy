@@ -1,5 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page import="ecommerce.dao.CartDAO" %>
+<%@ page import="ecommerce.model.User" %>
+<%
+    int currentCartCount = 0;
+    User sessionUserObj = (User) session.getAttribute("user");
+    if (sessionUserObj != null) {
+        try {
+            currentCartCount = new CartDAO().getCartItemCount(sessionUserObj.getUserId());
+        } catch(Exception e) { e.printStackTrace(); }
+    }
+    pageContext.setAttribute("cartCount", currentCartCount);
+%>
 <!DOCTYPE html>
 <html>
 <head>
