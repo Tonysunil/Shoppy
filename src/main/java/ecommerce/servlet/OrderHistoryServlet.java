@@ -25,7 +25,12 @@ public class OrderHistoryServlet extends HttpServlet {
         try {
             OrderDAO dao = new OrderDAO();
             List<Order> orders = dao.getOrdersByUserId(user.getUserId());
+            java.util.Map<Integer, List<ecommerce.model.OrderItem>> orderItemsMap = new java.util.HashMap<>();
+            for (Order o : orders) {
+                orderItemsMap.put(o.getOrderId(), dao.getOrderItems(o.getOrderId()));
+            }
             request.setAttribute("orders", orders);
+            request.setAttribute("orderItemsMap", orderItemsMap);
             request.getRequestDispatcher("/views/order-history.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

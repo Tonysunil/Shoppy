@@ -120,7 +120,7 @@ public class OrderDAO {
 
     public List<OrderItem> getOrderItems(int orderId) throws SQLException {
         List<OrderItem> list = new ArrayList<>();
-        String sql = "SELECT * FROM order_items WHERE order_id = ?";
+        String sql = "SELECT oi.*, p.product_name, p.image_url FROM order_items oi JOIN products p ON oi.product_id = p.product_id WHERE oi.order_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
@@ -132,6 +132,8 @@ public class OrderDAO {
                 oi.setProductId(rs.getInt("product_id"));
                 oi.setQuantity(rs.getInt("quantity"));
                 oi.setPrice(rs.getDouble("price"));
+                oi.setProductName(rs.getString("product_name"));
+                oi.setImageUrl(rs.getString("image_url"));
                 list.add(oi);
             }
         }

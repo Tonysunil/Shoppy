@@ -33,7 +33,14 @@
                             <thead><tr><th>Product</th><th>Qty</th><th>Price</th></tr></thead>
                             <tbody>
                                 <c:forEach var="item" items="${orderItemsMap[order.orderId]}">
-                                    <tr><td>Product ID: ${item.productId}</td><td>${item.quantity}</td><td>₹${item.price}</td></tr>
+                                    <tr>
+                                        <td>
+                                            <img src="${pageContext.request.contextPath}/${item.imageUrl}" alt="${item.productName}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" onerror="this.src='https://via.placeholder.com/40x40/cccccc/ffffff?text=Img'">
+                                            <span class="ms-2 fw-semibold">${item.productName}</span>
+                                        </td>
+                                        <td class="align-middle">${item.quantity}</td>
+                                        <td class="align-middle">₹${item.price}</td>
+                                    </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
